@@ -23,17 +23,27 @@ $onlineUsers = getOnlineUsers();
     <style>
         .hotel-container {
             width: 100%;
-            height: 100vh;
+            height: calc(100vh - 100px);
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
+        .ticket-info {
+            background: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
     <p>Online Users: <?php echo $onlineUsers; ?></p>
+    
+    <div class="ticket-info">
+        Generated SSO Ticket: <?php echo htmlspecialchars($auth_ticket); ?>
+    </div>
     
     <div class="hotel-container">
         <iframe src="about:blank" allowfullscreen></iframe>

@@ -19,9 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
                 
-                // Update online status and last login
-                $updateStmt = $mysqli->prepare("UPDATE users SET online = 1, last_login = NOW() WHERE id = ?");
-                $updateStmt->bind_param("i", $user['id']);
+                // Update online status and last login with Unix timestamp
+                $timestamp = time();
+                $updateStmt = $mysqli->prepare("UPDATE users SET online = 1, last_login = ? WHERE id = ?");
+                $updateStmt->bind_param("ii", $timestamp, $user['id']);
                 $updateStmt->execute();
                 
                 header('Location: me.php');

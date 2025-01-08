@@ -33,7 +33,7 @@ if (isset($_POST['logout'])) {
         <h2><?php echo htmlspecialchars($user['username']); ?></h2>
         <p>Motto: <?php echo htmlspecialchars($user['motto'] ?? 'No motto set'); ?></p>
         <p>Look: <?php echo htmlspecialchars($user['look'] ?? 'No look set'); ?></p>
-        <p>Last Login: <?php echo htmlspecialchars($user['last_login']); ?></p>
+        <p>Last Login: <?php echo $user['last_login'] ? date('Y-m-d H:i:s', $user['last_login']) : 'Never'; ?></p>
     </div>
     
     <form method="POST">
