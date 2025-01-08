@@ -106,7 +106,7 @@ $onlineUsers = getOnlineUsers();
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <img src="/assets/img/logo.png" alt="HABRPG" class="logo">
+    <img src="https://i.imgur.com/crIDL7J.png" alt="HABRPG" class="logo">
     
     <div class="container">
         <h1>Register</h1>

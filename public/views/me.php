@@ -34,7 +34,7 @@ if (isset($_GET['error'])) {
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <img src="/assets/img/logo.png" alt="HABRPG" class="logo">
+    <img src="https://i.imgur.com/crIDL7J.png" alt="HABRPG" class="logo">
     
     <div class="container">
         <p class="online-count"><?php echo $onlineUsers; ?> citizens exploring</p>
