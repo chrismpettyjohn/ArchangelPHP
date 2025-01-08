@@ -1,6 +1,6 @@
 <?php
-require_once 'config/mysqli.php';
-require_once 'middleware/auth.php';
+require_once '../config/mysqli.php';
+require_once '../middleware/auth.php';
 
 requireLogin();
 requireBetaCode();
@@ -19,7 +19,7 @@ $onlineUsers = getOnlineUsers();
 <html>
 <head>
     <title>Enter Hotel - Archangel 2</title>
-    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
     <style>
         .hotel-container {
             width: 100%;

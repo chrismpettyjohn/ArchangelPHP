@@ -1,6 +1,6 @@
 <?php
-require_once 'config/mysqli.php';
-require_once 'middleware/auth.php';
+require_once '../config/mysqli.php';
+require_once '../middleware/auth.php';
 
 redirectIfLoggedIn();
 
@@ -11,7 +11,7 @@ $onlineUsers = getOnlineUsers();
 <html>
 <head>
     <title>Register - Archangel 2</title>
-    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">

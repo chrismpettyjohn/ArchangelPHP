@@ -1,6 +1,6 @@
 <?php
-require_once 'config/mysqli.php';
-require_once 'middleware/auth.php';
+require_once '../config/mysqli.php';
+require_once '../middleware/auth.php';
 
 redirectIfLoggedIn();
 
@@ -54,112 +54,8 @@ $onlineUsers = getOnlineUsers();
 <html>
 <head>
     <title>Login - Archangel 2</title>
-    <style>
-    :root {
-        --bg-dark: #141a24;
-        --bg-card: #1b2432;
-        --text-primary: #ffffff;
-        --text-secondary: #8b95a4;
-        --accent-blue: #45a7ff;
-        --border-color: #2a3241;
-    }
-
-    body {
-        background-color: var(--bg-dark);
-        color: var(--text-primary);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .logo {
-        margin: 2rem 0;
-        max-width: 200px;
-    }
-
-    .container {
-        background-color: var(--bg-card);
-        padding: 2rem;
-        border-radius: 8px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .online-count {
-        color: var(--text-secondary);
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    label {
-        display: block;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
-    }
-
-    input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        background-color: var(--bg-dark);
-        color: var(--text-primary);
-        box-sizing: border-box;
-    }
-
-    input:focus {
-        outline: none;
-        border-color: var(--accent-blue);
-    }
-
-    .btn {
-        width: 100%;
-        padding: 0.75rem;
-        border: none;
-        border-radius: 4px;
-        background-color: var(--accent-blue);
-        color: white;
-        font-weight: 500;
-        cursor: pointer;
-        transition: opacity 0.2s;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-    }
-
-    .error {
-        color: #ff4b4b;
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-    }
-
-    .footer-text {
-        color: var(--text-secondary);
-        text-align: center;
-        margin-top: 1rem;
-    }
-
-    .footer-text a {
-        color: var(--accent-blue);
-        text-decoration: none;
-    }
-
-    h1 {
-        text-align: center;
-        margin-top: 0;
-        margin-bottom: 1rem;
-    }
-    </style>
+    <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
+   
 </head>
 <body>
     <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">
