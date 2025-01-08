@@ -2,6 +2,12 @@
 require_once '../config/mysqli.php';
 require_once '../middleware/auth.php';
 
+if (file_exists('../.env')) {
+    $dotenv = parse_ini_file('../.env', true);
+} else {
+    die("Environment file not found.");
+}
+
 requireLogin();
 requireBetaCode();
 
@@ -13,54 +19,25 @@ $stmt = $mysqli->prepare("UPDATE users SET auth_ticket = ? WHERE id = ?");
 $stmt->bind_param("si", $auth_ticket, $_SESSION['user_id']);
 $stmt->execute();
 
-$onlineUsers = getOnlineUsers();
+// Get iframe URL from environment variables
+$iframeUrl = isset($dotenv['IFRAME_URL']) ? $dotenv['IFRAME_URL'] : 'about:blank';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enter Hotel - Archangel 2</title>
+    <title>HabRPG - Enter Hotel</title>
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
     <style>
-        .hotel-container {
-            width: 100%;
-            height: calc(100vh - 220px);
-            margin-top: 1rem;
-        }
-        iframe {
+        html, body, iframe {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 8px;
             background-color: var(--bg-dark);
         }
-        .ticket-info {
-            background-color: var(--bg-dark);
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
     </style>
 </head>
 <body>
-    <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">
-    
-    <div class="container" style="max-width: 90%;">
-        <p class="online-count"><?php echo $onlineUsers; ?> citizens exploring</p>
-        
-        <div class="ticket-info">
-            Generated SSO Ticket: <?php echo htmlspecialchars($auth_ticket); ?>
-        </div>
-        
-        <div class="hotel-container">
-            <iframe src="about:blank" allowfullscreen></iframe>
-        </div>
-    </div>
-    
-    <footer>
-        <p class="footer-text">Archangel 2</p>
-    </footer>
+    <iframe src="<?php echo htmlspecialchars($iframeUrl . '?sso=' . $auth_ticket); ?>" allowfullscreen></iframe>
 </body>
 </html>

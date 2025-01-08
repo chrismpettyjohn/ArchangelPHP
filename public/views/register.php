@@ -10,7 +10,7 @@ $onlineUsers = getOnlineUsers();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register - Archangel 2</title>
+    <title>HabRPG - Register</title>
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body>

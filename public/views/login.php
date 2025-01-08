@@ -53,7 +53,7 @@ $onlineUsers = getOnlineUsers();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login - Archangel 2</title>
+    <title>HabRPG - Login</title>
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
    
 </head>

@@ -30,7 +30,7 @@ if (isset($_GET['error'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Profile - Archangel 2</title>
+    <title>HabRPG - My Profile</title>
     <link href="/assets/css/theme.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
