@@ -58,7 +58,7 @@ $onlineUsers = getOnlineUsers();
    
 </head>
 <body>
-    <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">
+    <img src="/assets/img/logo.png" alt="HABRPG" class="logo">
     
     <div class="container">
         <h1>Login</h1>
