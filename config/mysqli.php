@@ -28,7 +28,7 @@ if ($mysqli->connect_error) {
 // Helper functions
 function getOnlineUsers() {
     global $mysqli;
-    $result = $mysqli->query("SELECT COUNT(*) as count FROM users WHERE online = 1");
+    $result = $mysqli->query("SELECT COUNT(*) as count FROM users WHERE online = '1'");
     $row = $result->fetch_assoc();
     return $row['count'];
 }

@@ -11,7 +11,7 @@ $onlineUsers = getOnlineUsers();
 
 // Handle logout
 if (isset($_POST['logout'])) {
-    $stmt = $mysqli->prepare("UPDATE users SET online = 0 WHERE id = ?");
+    $stmt = $mysqli->prepare("UPDATE users SET online = '0' WHERE id = ?");
     $stmt->bind_param("i", $_SESSION['user_id']);
     $stmt->execute();
     

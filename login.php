@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Update online status and last login with Unix timestamp
                 $timestamp = time();
-                $updateStmt = $mysqli->prepare("UPDATE users SET online = 1, last_login = ? WHERE id = ?");
+                $updateStmt = $mysqli->prepare("UPDATE users SET online = '1', last_login = ? WHERE id = ?");
                 $updateStmt->bind_param("ii", $timestamp, $user['id']);
                 $updateStmt->execute();
                 
