@@ -18,34 +18,49 @@ $onlineUsers = getOnlineUsers();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Enter Hotel - ArchangelPHP</title>
+    <title>Enter Hotel - Archangel 2</title>
+    <link rel="stylesheet" href="/assets/css/theme.css">
     <style>
         .hotel-container {
             width: 100%;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 220px);
+            margin-top: 1rem;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            border-radius: 8px;
+            background-color: var(--bg-dark);
         }
         .ticket-info {
-            background: #f5f5f5;
-            padding: 10px;
-            margin-bottom: 10px;
+            background-color: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
             font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
-    <p>Online Users: <?php echo $onlineUsers; ?></p>
+    <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">
     
-    <div class="ticket-info">
-        Generated SSO Ticket: <?php echo htmlspecialchars($auth_ticket); ?>
+    <div class="container" style="max-width: 90%;">
+        <p class="online-count"><?php echo $onlineUsers; ?> citizens exploring</p>
+        
+        <div class="ticket-info">
+            Generated SSO Ticket: <?php echo htmlspecialchars($auth_ticket); ?>
+        </div>
+        
+        <div class="hotel-container">
+            <iframe src="about:blank" allowfullscreen></iframe>
+        </div>
     </div>
     
-    <div class="hotel-container">
-        <iframe src="about:blank" allowfullscreen></iframe>
-    </div>
+    <footer>
+        <p class="footer-text">Archangel 2</p>
+    </footer>
 </body>
 </html>

@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Update online status and last login with Unix timestamp
                 $timestamp = time();
-                $updateStmt = $mysqli->prepare("UPDATE users SET online = 1, last_login = ? WHERE id = ?");
+                $updateStmt = $mysqli->prepare("UPDATE users SET online = '1', last_login = ? WHERE id = ?");
                 $updateStmt->bind_param("ii", $timestamp, $user['id']);
                 $updateStmt->execute();
                 
@@ -53,31 +53,144 @@ $onlineUsers = getOnlineUsers();
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login - ArchangelPHP</title>
+    <title>Login - Archangel 2</title>
     <style>
-        .error { color: red; }
+    :root {
+        --bg-dark: #141a24;
+        --bg-card: #1b2432;
+        --text-primary: #ffffff;
+        --text-secondary: #8b95a4;
+        --accent-blue: #45a7ff;
+        --border-color: #2a3241;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo {
+        margin: 2rem 0;
+        max-width: 200px;
+    }
+
+    .container {
+        background-color: var(--bg-card);
+        padding: 2rem;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .online-count {
+        color: var(--text-secondary);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        display: block;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
+        box-sizing: border-box;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--accent-blue);
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    .error {
+        color: #ff4b4b;
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+
+    .footer-text {
+        color: var(--text-secondary);
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .footer-text a {
+        color: var(--accent-blue);
+        text-decoration: none;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
     </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <p>Online Users: <?php echo $onlineUsers; ?></p>
+    <img src="https://habrpg.com/img/logo.gif" alt="HABRPG" class="logo">
     
-    <?php if ($error): ?>
-        <p class="error"><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
+    <div class="container">
+        <h1>Login</h1>
+        <p class="online-count"><?php echo $onlineUsers; ?> citizens exploring</p>
+        
+        <?php if ($error): ?>
+            <p class="error"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn">Login</button>
+        </form>
+        
+        <p class="footer-text">Don't have an account? <a href="register.php">Sign up</a></p>
+    </div>
     
-    <form method="POST">
-        <div>
-            <label>Email:</label>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required>
-        </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-    
-    <p><a href="register.php">Register</a></p>
+    <footer>
+        <p class="footer-text">Archangel 2</p>
+    </footer>
 </body>
 </html>
