@@ -62,16 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $user_id = $mysqli->insert_id;
 
-
-            // Create player 
+            // Create player
             $stmt = $mysqli->prepare("INSERT INTO archangel_players (users_id) VALUES (?)");
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
 
+            // Get the ID of the newly created archangel_players row
+            $player_id = $mysqli->insert_id;
+
             // Create player skills
             $stmt = $mysqli->prepare("INSERT INTO archangel_players_skills (users_id) VALUES (?)");
-            $stmt->bind_param("i", $user_id);
+            $stmt->bind_param("i", $player_id);
             $stmt->execute();
+
 
             // Mark beta code as used
             $stmt = $mysqli->prepare("UPDATE nova_beta_codes SET claimed_at = ?, users_id = ? WHERE code = ?");
