@@ -1,17 +1,15 @@
 <?php
 require_once 'config/mysqli.php';
+require_once 'middleware/auth.php';
 
-if (!isLoggedIn()) {
-    header('Location: login.php');
-    exit;
-}
+requireLogin();
 
 $user = getCurrentUser();
 $onlineUsers = getOnlineUsers();
 
 // Handle logout
 if (isset($_POST['logout'])) {
-    $stmt = $mysqli->prepare("UPDATE users SET online = '0' WHERE id = ?");
+    $stmt = $mysqli->prepare("UPDATE users SET online = 0 WHERE id = ?");
     $stmt->bind_param("i", $_SESSION['user_id']);
     $stmt->execute();
     
@@ -19,15 +17,31 @@ if (isset($_POST['logout'])) {
     header('Location: login.php');
     exit;
 }
+
+$error = '';
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'no_beta':
+            $error = 'You need a valid beta code to enter the hotel.';
+            break;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>My Profile - ArchangelPHP</title>
+    <style>
+        .error { color: red; margin: 10px 0; }
+    </style>
 </head>
 <body>
     <h1>My Profile</h1>
     <p>Online Users: <?php echo $onlineUsers; ?></p>
+    
+    <?php if ($error): ?>
+        <p class="error"><?php echo htmlspecialchars($error); ?></p>
+    <?php endif; ?>
     
     <div>
         <h2><?php echo htmlspecialchars($user['username']); ?></h2>

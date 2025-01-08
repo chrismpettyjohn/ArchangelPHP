@@ -1,5 +1,8 @@
 <?php
 require_once 'config/mysqli.php';
+require_once 'middleware/auth.php';
+
+redirectIfLoggedIn();
 
 $error = '';
 

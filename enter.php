@@ -1,10 +1,9 @@
 <?php
 require_once 'config/mysqli.php';
+require_once 'middleware/auth.php';
 
-if (!isLoggedIn()) {
-    header('Location: login.php');
-    exit;
-}
+requireLogin();
+requireBetaCode();
 
 // Generate random 28 char auth ticket
 $auth_ticket = bin2hex(random_bytes(14)); // 14 bytes = 28 hex chars
