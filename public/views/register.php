@@ -4,7 +4,95 @@ require_once '../middleware/auth.php';
 
 redirectIfLoggedIn();
 
-// [Previous PHP code remains the same until the HTML part]
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $password_confirm = $_POST['password_confirm'] ?? '';
+    $beta_code = trim($_POST['beta_code'] ?? '');
+    $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+
+    // Validate email
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Please enter a valid email address';
+    }
+
+    // Validate username
+    if (empty($username) || strlen($username) < 3 || strlen($username) > 20) {
+        $errors['username'] = 'Username must be between 3 and 20 characters';
+    }
+
+    // Check if username exists
+    $stmt = $mysqli->prepare("SELECT id FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    if ($stmt->get_result()->num_rows > 0) {
+        $errors['username'] = 'Username already taken';
+    }
+
+    // Validate password
+    if (strlen($password) < 8 || !preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+        $errors['password'] = 'Password must be at least 8 characters and include letters and numbers';
+    }
+
+    if ($password !== $password_confirm) {
+        $errors['password'] = 'Passwords do not match';
+    }
+
+    // Validate beta code
+    $stmt = $mysqli->prepare("SELECT id FROM nova_beta_codes WHERE code = ? AND claimed_at IS NULL");
+    $stmt->bind_param("s", $beta_code);
+    $stmt->execute();
+    if ($stmt->get_result()->num_rows === 0) {
+        $errors['beta_code'] = 'Invalid or already used beta code';
+    }
+
+    // If no errors, create the account
+    if (empty($errors)) {
+        $mysqli->begin_transaction();
+
+        try {
+            // Create user account
+            $current_time = time();
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $mysqli->prepare("INSERT INTO users (mail, username, password, account_created, last_login, ip_current, ip_register) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssiiis", $email, $username, $password_hash, $current_time, $current_time, $ip_address, $ip_address);
+            $stmt->execute();
+            $user_id = $mysqli->insert_id;
+
+
+
+            // Create player record
+            $stmt = $mysqli->prepare("INSERT INTO archangel_players (users_id) VALUES (?)");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+
+            // Mark beta code as used
+            $stmt = $mysqli->prepare("UPDATE nova_beta_codes SET claimed_at = ?, users_id = ? WHERE code = ?");
+            $stmt->bind_param("iis", $current_time, $user_id, $beta_code);
+            $stmt->execute();
+
+            $mysqli->commit();
+
+            // Log the user in
+            session_start();
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+
+            // Redirect to the game
+            header('Location: /me');
+            exit;
+        } catch (Exception $e) {
+            $mysqli->rollback();
+            echo $e;
+            $errors['general'] = 'An error occurred while creating your account. Please try again.';
+        }
+    }
+}
+
+// Get online users count
 $onlineUsers = getOnlineUsers();
 ?>
 <!DOCTYPE html>
@@ -44,7 +132,7 @@ $onlineUsers = getOnlineUsers();
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Create a password" required>
-                <p class="hint-text">Password must be at least 8 characters long and include a mix of letters, numbers, and symbols</p>
+                <p class="hint-text">Password must be at least 8 characters long and include a mix of letters and numbers</p>
                 <?php if (!empty($errors['password'])): ?>
                     <p class="error"><?php echo htmlspecialchars($errors['password']); ?></p>
                 <?php endif; ?>
