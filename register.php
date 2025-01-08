@@ -9,6 +9,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
     $beta_code = $_POST['beta_code'] ?? '';
+    $ip_address = $_SERVER['REMOTE_ADDR'];
+    
+    // Validate beta code
+    if (empty($beta_code)) {
+        $errors['beta_code'] = 'Beta code is required';
+    } else {
+        $stmt = $mysqli->prepare("SELECT id, claimed_at FROM nova_beta_codes WHERE code = ?");
+        $stmt->bind_param("s", $beta_code);
+        $stmt->execute();
+        $beta_result = $stmt->get_result();
+        
+        if ($beta_result->num_rows === 0) {
+            $errors['beta_code'] = 'Invalid beta code';
+        } else {
+            $beta_data = $beta_result->fetch_assoc();
+            if ($beta_data['claimed_at'] !== null) {
+                $errors['beta_code'] = 'Beta code already claimed';
+            }
+        }
+    }
     
     // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -39,19 +59,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['password'] = 'Passwords do not match';
     }
     
-    // If no errors, create the user
+    // If no errors, create the user and update beta code
     if (empty($errors)) {
-        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-        
-        $stmt = $mysqli->prepare("INSERT INTO users (mail, username, password, beta_code, online) VALUES (?, ?, ?, ?, 1)");
-        $stmt->bind_param("ssss", $email, $username, $hashed_password, $beta_code);
-        
-        if ($stmt->execute()) {
-            $_SESSION['user_id'] = $mysqli->insert_id;
+        $mysqli->begin_transaction();
+        try {
+            // Insert user
+            $current_time = time();
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $mysqli->prepare("INSERT INTO users (mail, username, password, online, account_created, ip_register, ip_current) VALUES (?, ?, ?, 1, ?, ?, ?)");
+            $stmt->bind_param("sssiss", $email, $username, $hashed_password, $current_time, $ip_address, $ip_address);
+            $stmt->execute();
+            $user_id = $mysqli->insert_id;
+            
+            // Update beta code
+            $stmt = $mysqli->prepare("UPDATE nova_beta_codes SET claimed_at = ?, users_id = ? WHERE code = ?");
+            $stmt->bind_param("iis", $current_time, $user_id, $beta_code);
+            $stmt->execute();
+            
+            $mysqli->commit();
+            
+            $_SESSION['user_id'] = $user_id;
             header('Location: me.php');
             exit;
-        } else {
-            $errors['general'] = 'Registration failed';
+        } catch (Exception $e) {
+            $mysqli->rollback();
+            $errors['general'] = 'Registration failed: ' . $e->getMessage();
         }
     }
 }
@@ -107,6 +139,9 @@ $onlineUsers = getOnlineUsers();
         <div>
             <label>Beta Code:</label>
             <input type="text" name="beta_code" value="<?php echo htmlspecialchars($_POST['beta_code'] ?? ''); ?>" required>
+            <?php if (!empty($errors['beta_code'])): ?>
+                <span class="error"><?php echo htmlspecialchars($errors['beta_code']); ?></span>
+            <?php endif; ?>
         </div>
         
         <button type="submit">Register</button>
