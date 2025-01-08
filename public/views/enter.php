@@ -11,8 +11,7 @@ if (file_exists('../.env')) {
 requireLogin();
 requireBetaCode();
 
-// Generate random 28 char auth ticket
-$auth_ticket = bin2hex(random_bytes(14)); // 14 bytes = 28 hex chars
+$auth_ticket = bin2hex(random_bytes(8));
 
 // Update user's auth ticket
 $stmt = $mysqli->prepare("UPDATE users SET auth_ticket = ? WHERE id = ?");
