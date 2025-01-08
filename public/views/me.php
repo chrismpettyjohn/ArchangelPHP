@@ -14,7 +14,7 @@ if (isset($_POST['logout'])) {
     $stmt->execute();
     
     session_destroy();
-    header('Location: login.php');
+    header('Location: login');
     exit;
 }
 
@@ -54,7 +54,7 @@ if (isset($_GET['error'])) {
             <form method="POST">
                 <button type="submit" name="logout" class="btn btn-secondary">Logout</button>
             </form>
-            <a href="enter.php" class="btn">Enter Hotel</a>
+            <a href="/enter" class="btn">Enter Hotel</a>
         </div>
     </div>
     

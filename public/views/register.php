@@ -66,7 +66,7 @@ $onlineUsers = getOnlineUsers();
             <button type="submit" class="btn">Register</button>
         </form>
         
-        <p class="footer-text">Already have an account? <a href="login.php">Login</a></p>
+        <p class="footer-text">Already have an account? <a href="/login">Login</a></p>
     </div>
     
     <footer>

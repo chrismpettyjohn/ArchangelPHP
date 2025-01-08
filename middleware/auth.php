@@ -2,7 +2,7 @@
 
 function requireLogin() {
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /login.php');
+        header('Location: /login');
         exit;
     }
 }
@@ -11,7 +11,7 @@ function requireBetaCode() {
     global $mysqli;
 
     if (!isset($_SESSION['user_id'])) {
-        header('Location: /login.php');
+        header('Location: /login');
         exit;
     }
 
@@ -21,14 +21,14 @@ function requireBetaCode() {
     $beta_result = $stmt->get_result();
 
     if ($beta_result->num_rows === 0) {
-        header('Location: /me.php?error=no_beta');
+        header('Location: /me?error=no_beta');
         exit;
     }
 }
 
 function redirectIfLoggedIn() {
     if (isset($_SESSION['user_id'])) {
-        header('Location: /me.php');
+        header('Location: /me');
         exit;
     }
 }

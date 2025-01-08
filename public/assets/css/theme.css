@@ -1,11 +1,12 @@
-::root {
-    --bg-dark: #141a24;
-    --bg-card: #1b2432;
-    --text-primary: #ffffff;
-    --text-secondary: #8b95a4;
-    --accent-blue: #45a7ff;
-    --border-color: #2a3241;
+:root {
+    --bg-dark: #141a24; /* Very dark background */
+    --bg-card: #1b2432; /* Slightly lighter dark for cards */
+    --text-primary: #ffffff; /* White for primary text */
+    --text-secondary: #8b95a4; /* Grayish blue for secondary text */
+    --accent-blue: #45a7ff; /* Bright blue for accents */
+    --border-color: #2a3241; /* Muted dark border color */
 }
+
 
 body {
     background-color: var(--bg-dark);

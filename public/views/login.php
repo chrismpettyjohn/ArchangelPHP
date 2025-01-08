@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updateStmt->bind_param("ii", $timestamp, $user['id']);
                 $updateStmt->execute();
                 
-                header('Location: me.php');
+                header('Location: me');
                 exit;
             } else {
                 $error = 'Invalid email or password';
@@ -82,7 +82,7 @@ $onlineUsers = getOnlineUsers();
             <button type="submit" class="btn">Login</button>
         </form>
         
-        <p class="footer-text">Don't have an account? <a href="register.php">Sign up</a></p>
+        <p class="footer-text">Don't have an account? <a href="/register">Sign up</a></p>
     </div>
     
     <footer>
