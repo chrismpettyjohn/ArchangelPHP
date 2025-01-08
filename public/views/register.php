@@ -63,9 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = $mysqli->insert_id;
 
 
-
-            // Create player record
+            // Create player 
             $stmt = $mysqli->prepare("INSERT INTO archangel_players (users_id) VALUES (?)");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+
+            // Create player skills
+            $stmt = $mysqli->prepare("INSERT INTO archangel_players_skills (users_id) VALUES (?)");
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
 
